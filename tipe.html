@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>tipe.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>tipe.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>© 2014 Arjan van der Gaag
+Released under the MIT license.
+More information: <a href="http://avdgaag.github.io/tipe">http://avdgaag.github.io/tipe</a></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Define Tipe either as a CommonJS module or a browser global. If need be,
+we can also define setup as an AMD module.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(root, factory)</span> </span>{
+  <span class="hljs-keyword">if</span>(<span class="hljs-keyword">typeof</span> exports !== <span class="hljs-string">'undefined'</span>) {
+    factory(root, exports);
+  } <span class="hljs-keyword">else</span> {
+    root.Tipe = factory(<span class="hljs-keyword">this</span>, {});
+  }
+})(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(root, Tipe)</span> </span>{
+<span class="hljs-pi">  'use strict'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h2 id="utilities">Utilities</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Keep references to generic functions we need later.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> __hasOwn = <span class="hljs-built_in">Object</span>.prototype.hasOwnProperty;
+  <span class="hljs-keyword">var</span> __slice = <span class="hljs-built_in">Array</span>.prototype.slice;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Generic <code>extend</code> function to merge objects together. Accepts two or more
+arguments, with all arguments being combined into the first.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extend</span><span class="hljs-params">(first)</span> </span>{
+    <span class="hljs-keyword">var</span> others = __slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">return</span> others.reduce(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(previous, current)</span> </span>{
+      <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> current) {
+        <span class="hljs-keyword">if</span>(__hasOwn.call(current, key)) {
+          previous[key] = current[key];
+        }
+      }
+      <span class="hljs-keyword">return</span> previous;
+    }, first);
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Inheritence function to set up the appropriate constructor and protoypes
+to enable inheriting from Tipe.Model.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">inherits</span><span class="hljs-params">(child, parent)</span> </span>{
+    extend(child, parent);
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Ctor</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">this</span>.constructor = child;
+    }
+    Ctor.prototype = parent.prototype;
+    child.prototype = <span class="hljs-keyword">new</span> Ctor();
+    child.__super__ = parent.prototype;
+    <span class="hljs-keyword">return</span> child;
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h2 id="model">Model</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>The <code>Model</code> constructor is the base for your custom Tipe models. It is
+defined with a schema definition and can then be used like any other plain
+javascript object. Tipe models tend to have very little behaviour and are
+mostly simple containers of data.</p>
+<p>You can define the model schema using a callback function that will be
+passed to <code>Schema</code>, so you can define a trivial <code>Person</code> model like so:</p>
+<pre><code><span class="hljs-keyword">var</span> Person = Tipe.Model.extend(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(attr)</span> </span>{
+  attr.accessor(<span class="hljs-string">'firstName'</span>);
+  attr.accessor(<span class="hljs-string">'lastName'</span>);
+  attr.property(<span class="hljs-string">'fullName'</span>, {
+    get: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.firstName + <span class="hljs-string">' '</span> + <span class="hljs-keyword">this</span>.lastName;
+    }
+  });
+});
+</code></pre><p>Having defined such a model, you can instantiate and use it like
+regular Javascript objects:</p>
+<pre><code><span class="hljs-keyword">var</span> john = <span class="hljs-keyword">new</span> Person({ firstName: <span class="hljs-string">'John'</span>, lastName: <span class="hljs-string">'Cleese'</span> });
+john.firstName <span class="hljs-comment">// =&gt; 'John'</span>
+john.lastName  <span class="hljs-comment">// =&gt; 'Cleese'</span>
+john.fullName  <span class="hljs-comment">// =&gt; 'John Cleese'</span>
+john.firstName = <span class="hljs-string">'Graham'</span>;
+john.fullName <span class="hljs-comment">// =&gt; 'Graham Cleese'</span>
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> Model = (<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Model</span><span class="hljs-params">(attributes)</span> </span>{
+      <span class="hljs-keyword">this</span>.attributes = <span class="hljs-keyword">this</span>.constructor.schema.attributesWithDefaults();
+      <span class="hljs-keyword">this</span>.update(attributes);
+    }
+
+    extend(Model.prototype, {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Update a model’s attributes from a given set of keys and values.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      update: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(attributes)</span> </span>{
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> attributes) {
+          <span class="hljs-keyword">if</span>(__hasOwn.call(attributes, key) &amp;&amp; !<span class="hljs-keyword">this</span>.constructor.schema.hasAttribute(key)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'No such attribute: '</span> + key);
+          }
+        }
+        extend(<span class="hljs-keyword">this</span>, attributes);
+      },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Create a JSON representation of this model, taking into account the
+schema definition to skip or process certain properties. This results
+in a javascript object that can be stringified, not an actual string
+of JSON content.</p>
+<p>To omit model attributes from its JSON representation, define the
+attribute with a <code>serialize: false</code> option. To alter how it is
+serialized, provide a function to the <code>serialize</code> option.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      toJSON: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> json = {};
+        <span class="hljs-keyword">this</span>.constructor.schema.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, attribute)</span> </span>{
+          <span class="hljs-keyword">if</span>(!attribute.serialize) <span class="hljs-keyword">return</span>;
+          <span class="hljs-keyword">if</span>(<span class="hljs-keyword">typeof</span> attribute.serialize === <span class="hljs-string">'function'</span>) {
+            json[name] = attribute.serialize(<span class="hljs-keyword">this</span>[name]);
+          } <span class="hljs-keyword">else</span> {
+            json[name] = <span class="hljs-keyword">this</span>[name];
+          }
+        }, <span class="hljs-keyword">this</span>);
+        <span class="hljs-keyword">return</span> json;
+      }
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Create a new subclass of Model for your own purposes, providing a
+callback function to define its schema. The callback function will
+receive a <code>Schema</code> object on which you can call <code>reader</code>, <code>writer</code> and
+<code>accessor</code> methods.</p>
+<p>This returns a constructor function that you can use to instantiate a
+model object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Model.extend = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(fn)</span> </span>{
+      inherits(Constructor, Model);
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Constructor</span><span class="hljs-params">()</span> </span>{
+        Model.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);
+      }
+      Constructor.schema = <span class="hljs-keyword">new</span> Schema(fn);
+      <span class="hljs-built_in">Object</span>.defineProperties(
+        Constructor.prototype,
+        Constructor.schema.attributes
+      );
+      <span class="hljs-keyword">return</span> Constructor;
+    };
+
+    <span class="hljs-keyword">return</span> Model;
+  })();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>The Schema object holds property definitions. Properties are model names
+combined with options that <code>Object.defineProperty</code> will understand. You
+can define <code>reader</code>, <code>writer</code> and <code>accessor</code> properties, or use the
+generic <code>property</code> method to craft your own.</p>
+<p>Usage:</p>
+<pre><code><span class="hljs-keyword">var</span> schema = <span class="hljs-keyword">new</span> Schema(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(attr)</span> </span>{
+  attr.reader(<span class="hljs-string">'name'</span>);
+});
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> Schema = (<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Schema</span><span class="hljs-params">(fn)</span> </span>{
+      <span class="hljs-keyword">this</span>.attributes = {};
+      fn(<span class="hljs-keyword">this</span>);
+    }
+
+    extend(Schema.prototype, {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Loop over all attributes in the schema and call fn
+for each attribute definition.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      forEach: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(fn, context)</span> </span>{
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> attr <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>.attributes) {
+          <span class="hljs-keyword">if</span>(__hasOwn.call(<span class="hljs-keyword">this</span>.attributes, attr)) {
+            fn.call(context, attr, <span class="hljs-keyword">this</span>.attributes[attr]);
+          }
+        }
+      },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Test if the schema currently has a property by a given name.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      hasAttribute: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> </span>{
+        <span class="hljs-keyword">return</span> name <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>.attributes;
+      },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Provides an empty set of attributes for a model to track its
+contents in and pre-fills it with any default values defined
+in the schema.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      attributesWithDefaults: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> all = {};
+        <span class="hljs-keyword">this</span>.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, attribute)</span> </span>{
+          <span class="hljs-keyword">if</span>(attribute.default) {
+            all[name] = attribute.default;
+          }
+        });
+        <span class="hljs-keyword">return</span> all;
+      },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Define a generic property that is by default enumerable and
+serializable. You can override any options <code>Object.defineProperty</code>
+understands.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      property: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, definition)</span> </span>{
+        <span class="hljs-keyword">this</span>.attributes[name] = extend({}, {
+          enumerable: <span class="hljs-literal">true</span>,
+          serialize: <span class="hljs-literal">true</span>
+        }, definition);
+      },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Define a standard read-only property that delegates to a model’s
+internal <code>attributes</code> object to look up its value.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      reader: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, definition)</span> </span>{
+        <span class="hljs-keyword">this</span>.property(name, extend({}, {
+          get: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.attributes[name]; }
+        }, definition));
+      },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Define a standard write-only property that delegates to a model’s
+internal <code>attributes</code> object to store its value.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      writer: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, definition)</span> </span>{
+        <span class="hljs-keyword">this</span>.property(name, extend({}, {
+          set: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(newVal)</span> </span>{ <span class="hljs-keyword">this</span>.attributes[name] = newVal; }
+        }, definition));
+      },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Combination of <code>reader</code> and <code>writer</code> to define a property that can
+both be read and written to, delegating storage to the internal
+<code>attributes</code> property of the model.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      accessor: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, definition)</span> </span>{
+        <span class="hljs-keyword">this</span>.property(name, extend({}, {
+          get: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.attributes[name]; },
+          set: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(newVal)</span> </span>{ <span class="hljs-keyword">this</span>.attributes[name] = newVal; }
+        }, definition));
+      }
+    });
+
+    <span class="hljs-keyword">return</span> Schema;
+  }());</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Provide the Model constructor in the Tipe namespace.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Tipe.Model = Model;
+
+  <span class="hljs-keyword">return</span> Tipe;
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
