@@ -74,8 +74,8 @@ console.log(john.toJSON());
 
 ## Credits
 
-Author: Arjan van der Gaag  
-Email: arjan@arjanvandergaag.nl  
-URL: http://github.com/avdgaag/tipe  
+**Author**: Arjan van der Gaag  
+**Email**: arjan@arjanvandergaag.nl  
+**URL**: http://github.com/avdgaag/tipe  
 
 Released under a MIT license. See LICENSE for more information.
