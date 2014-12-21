@@ -1,5 +1,5 @@
 {
-  "name": "tipe",
+  "name": "tipe-model",
   "version": "0.1.0",
   "description": "A simple business model library",
   "main": "src/tipe.js",

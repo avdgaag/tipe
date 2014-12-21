@@ -8,7 +8,7 @@ business models.
 You can install Tipe with NPM:
 
 ```
-% npm install tipe
+% npm install tipe-model
 ```
 
 Then you can `require` it in your code:
