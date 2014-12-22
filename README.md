@@ -1,7 +1,10 @@
 # Tipe: a very simple model library
 
 Tipe is an experiment in building a very simple library for building javascript
-business models.
+business models. These models are inteded to have very little logic, and act
+mostly as simple data containers. You are expected to validate incoming property
+values in setter functions and do transformations and business logic in other
+objects.
 
 ## Installation
 
